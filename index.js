@@ -4,10 +4,14 @@ global.config = require(__basename + '/config/config.js');
 
 const express = require('express');
 
+const bodyParser = require('body-parser');
+
 const Routes = require(__basename + '/routes/routes.js');
 
 //express实例化
 const app = express();
+
+
 
 //设置跨域权限
 app.all('*', (req, res, next) => {
@@ -18,6 +22,10 @@ app.all('*', (req, res, next) => {
 	next();
 });
 
+//解析post请求体，将请求体格式化成一个对象
+app.use(bodyParser.json());
+
+global.urlencoded = bodyParser.urlencoded({ extended: false })
 //设置静态目录
 //中间件
 app.use(express.static(__basename + '/public'));

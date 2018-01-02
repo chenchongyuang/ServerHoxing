@@ -10,7 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@alicloud/sms-sdk": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
     "express": "^4.16.2",
+    "moment": "^2.20.1",
     "mysql": "^2.15.0",
     "q": "^1.5.1"
   }

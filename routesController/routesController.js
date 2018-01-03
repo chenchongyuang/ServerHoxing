@@ -15,8 +15,8 @@ class RouteController {
         let time = new Date().getTime().toString();
         
         let code = time.slice(time.length - 6);
-         
-        Utils.sendMessage(req.query.phone,code)
+         res.send({code});
+        /*Utils.sendMessage(req.query.phone,code)
         .then((data) => {
 				    let {Code} = data;
 				    if (Code === 'OK') {
@@ -27,7 +27,7 @@ class RouteController {
 				}, (err) => {
 				    console.log(err);
 				    res.json({msg:'发送超时',status:0})
-				})
+				})*/
 	}
 	//注册功能
 	registerController(req,res){
@@ -56,6 +56,31 @@ class RouteController {
         	res.json(common.register.error);
         })
 	  
+	}
+
+	loginController(req,res){
+		Utils.addCrypto(req.query,'pwd');
+		let selectSQL1 = SQL.findOneSQL(req.query,'phone');
+		let selectSQL2 = SQL.loginSQL(req.query,'phone','pwd');
+		
+		   API.query(selectSQL1)
+		     .then(result =>{
+		     	if(result[0].length === 1){
+                    API.query(selectSQL2)
+                      .then(result =>{
+                      	if(result[0].length === 1){
+                      		res.json(common.login.success);
+                      	}else{
+                            res.json(common.login.error);
+                      	}
+                      })
+		     	}else{
+		     		res.json(common.login.info);
+		     	}
+		     })
+		     .catch(err =>{
+		     	res.json(common.login.info);
+		     })
 	}
 
 }

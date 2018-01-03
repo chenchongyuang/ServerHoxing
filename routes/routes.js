@@ -7,4 +7,6 @@ exports.routes = function (app) {
     app.get('/register', RouteController.registerController);
     
     app.get('/login',RouteController.loginController);
+
+    app.get('/home',RouteController.homeController);
 }

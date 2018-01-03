@@ -69,7 +69,18 @@ class RouteController {
                     API.query(selectSQL2)
                       .then(result =>{
                       	if(result[0].length === 1){
+                      		common.login.success.phone = result[0][0].phone;
+                      		common.login.success.uname = result[0][0].uname;
                       		res.json(common.login.success);
+                      		let updatsql = SQL.loginstatusSQL(req.query,1);
+                      		API.query(updatsql)
+                      		   .then(result =>{
+
+                      		   	   res.json(common.login.success);
+                      		   })
+                      		   .catch(err =>{
+                      		   	   res.json(common.login.info);
+                      		   })
                       	}else{
                             res.json(common.login.error);
                       	}
@@ -81,6 +92,10 @@ class RouteController {
 		     .catch(err =>{
 		     	res.json(common.login.info);
 		     })
+	}
+    
+	homeController(req,res){
+
 	}
 
 }

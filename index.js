@@ -28,8 +28,7 @@ app.use(bodyParser.json());
 global.urlencoded = bodyParser.urlencoded({ extended: false })
 //设置静态目录
 //中间件
-app.use(express.static(__basename + '/public'));
-
+app.use(express.static(__basename + '/img'));
 //加载所有路由信息
 Routes.routes(app);
 

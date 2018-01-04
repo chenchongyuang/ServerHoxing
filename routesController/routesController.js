@@ -72,10 +72,11 @@ class RouteController {
                       		common.login.success.phone = result[0][0].phone;
                       		common.login.success.uname = result[0][0].uname;
                       		res.json(common.login.success);
+
                       		let updatsql = SQL.loginstatusSQL(req.query,1);
                       		API.query(updatsql)
                       		   .then(result =>{
-
+ 
                       		   	   res.json(common.login.success);
                       		   })
                       		   .catch(err =>{
@@ -95,7 +96,25 @@ class RouteController {
 	}
     
 	homeController(req,res){
-
+		let selectSQL = SQL.abvImgSQL(req.query);
+		let arr={};
+        API.query(selectSQL)
+          .then(result =>{
+          	  arr.abvImg=result[0];
+          	  let selectSQL1 = SQL.categorySQL(req.query);
+          	  API.query(selectSQL1)
+          	    .then(result =>{
+          	    	arr.category=result[0];
+          	    	res.json(arr);
+          	    })
+          	    .catch(err =>{
+          	    	res.json(err);
+          	    })
+          })
+          .catch(err =>{
+          	res.send(err);
+          })
+         
 	}
 
 }

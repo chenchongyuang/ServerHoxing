@@ -25,7 +25,7 @@ app.all('*', (req, res, next) => {
 //解析post请求体，将请求体格式化成一个对象
 app.use(bodyParser.json());
 
-global.urlencoded = bodyParser.urlencoded({ extended: false })
+app.use(bodyParser.urlencoded({extended:true}));
 //设置静态目录
 //中间件
 app.use(express.static(__basename + '/img'));

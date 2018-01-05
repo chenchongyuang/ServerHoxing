@@ -33,14 +33,14 @@ class RouteController {
 	registerController(req,res){
 	  
       //查询手机号是否被注册
-      let selectSQL = SQL.findOneSQL(req.query,'phone');
+      let selectSQL = SQL.findOneSQL(req.body,'phone');
       API.query(selectSQL)
         .then(result =>{
         	if(result[0].length == 1){
         		res.json(common.register.info);
         	}else{
-	    		Utils.addCrypto(req.query,'pwd');
-					  let sql = SQL.registerSQL(req.query);
+	    		Utils.addCrypto(req.body,'pwd');
+					  let sql = SQL.registerSQL(req.body);
 					  API.query(sql)
 						  .then(data =>{
 						  	res.json(common.register.success);
@@ -59,10 +59,10 @@ class RouteController {
 	}
 
 	loginController(req,res){
-		Utils.addCrypto(req.query,'pwd');
-		let selectSQL1 = SQL.findOneSQL(req.query,'phone');
-		let selectSQL2 = SQL.loginSQL(req.query,'phone','pwd');
-		
+		console.log(req.body);
+		Utils.addCrypto(req.body,'pwd');
+		let selectSQL1 = SQL.findOneSQL(req.body,'phone');
+		let selectSQL2 = SQL.loginSQL(req.body,'phone','pwd');
 		   API.query(selectSQL1)
 		     .then(result =>{
 		     	if(result[0].length === 1){
@@ -73,7 +73,7 @@ class RouteController {
                       		common.login.success.uname = result[0][0].uname;
                       		res.json(common.login.success);
 
-                      		let updatsql = SQL.loginstatusSQL(req.query,1);
+                      		let updatsql = SQL.loginstatusSQL(req.body,1);
                       		API.query(updatsql)
                       		   .then(result =>{
  
@@ -96,25 +96,28 @@ class RouteController {
 	}
     
 	homeController(req,res){
-		let selectSQL = SQL.abvImgSQL(req.query);
-		let arr={};
-        API.query(selectSQL)
-          .then(result =>{
-          	  arr.abvImg=result[0];
-          	  let selectSQL1 = SQL.categorySQL(req.query);
-          	  API.query(selectSQL1)
-          	    .then(result =>{
-          	    	arr.category=result[0];
-          	    	res.json(arr);
-          	    })
-          	    .catch(err =>{
-          	    	res.json(err);
-          	    })
-          })
-          .catch(err =>{
-          	res.send(err);
-          })
-         
+		let selectSQL = SQL.homeSQL(req.query);
+		let data = {};
+		let arr =['banner', 'classify', 'products'];
+		selectSQL.forEach((v,i) =>{
+            API.query(v)
+	          .then(result =>{
+	          	data[arr[i]] = result[0];
+	          	console.log(data);
+	          	if(i == selectSQL.length - 1 ){
+	          		
+	          		res.send(data);
+	          	}
+	          	
+	          })
+	          .catch(err =>{
+	          	res.send(err);
+	          })
+		})
+	}
+
+	product_dataController(req,res){
+		res.send('请求成功');
 	}
 
 }

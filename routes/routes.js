@@ -2,11 +2,13 @@ const RouteController = require(__basename + '/routesController/routesController
 
 exports.routes = function (app) {
 
-	app.get('/message', RouteController.sendMessageController);
+	app.post('/message', RouteController.sendMessageController);
 
-    app.get('/register', RouteController.registerController);
+    app.post('/register', RouteController.registerController);
     
-    app.get('/login',RouteController.loginController);
+    app.post('/login',RouteController.loginController);
 
     app.get('/home',RouteController.homeController);
+
+    app.get('/product_data',RouteController.product_dataController);
 }

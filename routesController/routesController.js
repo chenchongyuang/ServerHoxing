@@ -46,18 +46,16 @@ class RouteController {
 						  	res.json(common.register.success);
 						  }) 
 						  .catch(err =>{
-						  	console.log(3);
 						  	res.json(common.register.error);
 				 })
 	          }
         })
         .catch(err =>{
-        	console.log(4);
         	res.json(common.register.error);
         })
 	  
 	}
-
+    //登陆功能
 	loginController(req,res){
 		console.log(req.body);
 		Utils.addCrypto(req.body,'pwd');
@@ -94,7 +92,7 @@ class RouteController {
 		     	res.json(common.login.info);
 		     })
 	}
-    
+    //首页数据查询
 	homeController(req,res){
 		let selectSQL = SQL.homeSQL(req.query);
 		let data = {};
@@ -103,21 +101,68 @@ class RouteController {
             API.query(v)
 	          .then(result =>{
 	          	data[arr[i]] = result[0];
-	          	console.log(data);
 	          	if(i == selectSQL.length - 1 ){
-	          		
 	          		res.send(data);
 	          	}
-	          	
 	          })
 	          .catch(err =>{
 	          	res.send(err);
 	          })
 		})
 	}
-
+	//产品详情页查询
 	product_dataController(req,res){
-		res.send('请求成功');
+		let selectSQL = SQL.product_dataSQL(req.query,'id'); 
+		API.query(selectSQL)
+		  .then(result =>{
+		  	  res.send(result[0]);
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
+	}
+
+	//产品查询
+	productController(req,res){
+        let selectSQL = SQL.homeSQL();
+        let data=[];
+        API.query(selectSQL[2])
+          .then(result =>{
+          	data.push(result[0]);
+          	API.query(selectSQL[3])
+          	  .then(result =>{
+          	  	data.push(result[0]);
+          	  	res.send(data);
+          	  })
+          	  .catch(err =>{
+          	  	res.send(err);
+          	  })
+          })
+          .catch(err =>{
+          	res.send(err);
+          })
+        
+	}
+    //订单查询
+	orderController(req,res){
+		let selectSQL = SQL.orderSQL();
+		let data=[];
+		API.query(selectSQL[0])
+		  .then(result =>{
+		  	data.push(result[0]);
+		  	API.query(selectSQL[1])
+		  	  .then(result =>{
+		  	  	data.push(result[0]);
+		  	  	res.send(data);
+		  	  })
+		  	  .catch(err =>{
+		  	  	res.send(err);
+		  	  })
+		  	
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
 	}
 
 }

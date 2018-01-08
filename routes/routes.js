@@ -11,4 +11,10 @@ exports.routes = function (app) {
     app.get('/home',RouteController.homeController);
 
     app.get('/product_data',RouteController.product_dataController);
+
+    app.get('/product',RouteController.productController);
+
+    app.get('/order',RouteController.orderController);
+
+    
 }

@@ -191,7 +191,7 @@ class RouteController {
 		  	res.send(err);
 		  })
 	}
-
+    //购物车查询
 	shoppingController(req,res){
 		let selectSQL = SQL.shoppingSQL();
 		let data = [];
@@ -212,7 +212,28 @@ class RouteController {
 		  	res.send(err);
 		  })
 	}
-
+	//退货查询
+	returnsController(req,res){
+		let selectSQL = SQL.returnsSQL();
+		API.query(selectSQL)
+		  .then(result =>{
+		  	res.send(result[0]);
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
+	}
+    //删除订单
+	Deletete_orderController(req,res){
+		 let selectSQL = SQL.Delete_orderSQL(req.query.id);
+		 API.query(selectSQL)
+		 .then(result =>{
+		 	res.send(result[0]);
+		 })
+		 .catch(err =>{
+		 	res.send(err);
+		 })
+	}    
 }
 
 module.exports = new RouteController();

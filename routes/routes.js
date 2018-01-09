@@ -16,5 +16,7 @@ exports.routes = function (app) {
 
     app.get('/order',RouteController.orderController);
 
-    
+    app.post('/forget_pwd',RouteController.forget_pwdController);   
+
+    app.get('/shopping',RouteController.shoppingController); 
 }

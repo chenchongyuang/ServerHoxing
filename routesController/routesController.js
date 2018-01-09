@@ -143,6 +143,33 @@ class RouteController {
           })
         
 	}
+	//修改密码
+	forget_pwdController(req,res){
+		Utils.addCrypto(req.body,'pwd');
+		console.log(req.body);
+		let selectSQL = SQL.findOneSQL(req.body,'phone');
+		let selectSQL1 = SQL.forget_pwdSQL(req.body);
+		API.query(selectSQL)
+		  .then(result =>{
+		  	  if(result[0].length === 1){
+                     API.query(selectSQL1)
+                     .then(result =>{
+                   	    res.send('修改成功');
+                     })
+                     .catch(err =>{
+                     	res.send(err);
+                     })
+                       
+                   
+		  	  }else{
+		  	  	 res.send('账号未注册');
+		  	  }
+		  	 
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
+	}
     //订单查询
 	orderController(req,res){
 		let selectSQL = SQL.orderSQL();
@@ -159,6 +186,27 @@ class RouteController {
 		  	  	res.send(err);
 		  	  })
 		  	
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
+	}
+
+	shoppingController(req,res){
+		let selectSQL = SQL.shoppingSQL();
+		let data = [];
+		API.query(selectSQL[0])
+		  .then(result =>{
+		  	data.push(result[0])
+		  	API.query(selectSQL[1])
+		  	.then(result =>{
+		  		data.push(result[0])
+		  		res.send(data);
+		  	})
+		  	.catch(err =>{
+		  		res.send(err);
+		  	})
+		  
 		  })
 		  .catch(err =>{
 		  	res.send(err);

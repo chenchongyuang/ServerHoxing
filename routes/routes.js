@@ -23,5 +23,8 @@ exports.routes = function (app) {
     app.get('/returns',RouteController.returnsController); 
     //删除订单
     app.get('/Delete_order',RouteController.Deletete_orderController);
+    //地址添加
+    app.get('/address',RouteController.addressController);
+    //地址管理
 
 }

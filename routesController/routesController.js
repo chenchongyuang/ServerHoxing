@@ -233,7 +233,19 @@ class RouteController {
 		 .catch(err =>{
 		 	res.send(err);
 		 })
-	}    
+	}
+	//添加地址
+	addressController(req,res){
+		console.log(req.query);
+		let selectSQL = SQL.addressSQL(req.query);
+		API.query(selectSQL)
+		  .then(result =>{
+		  	res.send(result[0]);
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
+	}  
 }
 
 module.exports = new RouteController();

@@ -57,10 +57,10 @@ class RouteController {
 	}
     //登陆功能
 	loginController(req,res){
-		console.log(req.body);
 		Utils.addCrypto(req.body,'pwd');
 		let selectSQL1 = SQL.findOneSQL(req.body,'phone');
 		let selectSQL2 = SQL.loginSQL(req.body,'phone','pwd');
+		//let selectSQL3 = SQL.address_InquireSQL();
 		   API.query(selectSQL1)
 		     .then(result =>{
 		     	if(result[0].length === 1){
@@ -69,17 +69,22 @@ class RouteController {
                       	if(result[0].length === 1){
                       		common.login.success.phone = result[0][0].phone;
                       		common.login.success.uname = result[0][0].uname;
-                      		res.json(common.login.success);
-
                       		let updatsql = SQL.loginstatusSQL(req.body,1);
-                      		API.query(updatsql)
-                      		   .then(result =>{
- 
-                      		   	   res.json(common.login.success);
-                      		   })
-                      		   .catch(err =>{
-                      		   	   res.json(common.login.info);
-                      		   })
+                      		for(let i=0;i<updatsql.length;i++){
+                      			  API.query(updatsql[i])
+	                      		   .then(result =>{
+	                      		   	   if( i === updatsql.length - 1 ){
+                                   common.login.success.default_address = result[0][0].area +','+result[0][0].detailed_area;
+                                   console.log(common.login.success.default_address)
+	                      		   	   res.json(common.login.success);
+	                      		   	   }
+	                                 
+	                      		   })
+	                      		   .catch(err =>{
+	                      		   	   res.json(common.login.info);
+	                      		   })
+                      		}
+                      		
                       	}else{
                             res.json(common.login.error);
                       	}
@@ -236,16 +241,28 @@ class RouteController {
 	}
 	//添加地址
 	addressController(req,res){
-		console.log(req.query);
 		let selectSQL = SQL.addressSQL(req.query);
-		API.query(selectSQL)
+		API.query(selectSQL[0])
 		  .then(result =>{
+		  	console.log(result[0]);
 		  	res.send(result[0]);
 		  })
 		  .catch(err =>{
 		  	res.send(err);
 		  })
-	}  
+	}
+	//地址管理
+  ship_adsController(req,res){
+    	console.log(req.query);
+    	let selectSQL = SQL.addressSQL(req.query);
+			API.query(selectSQL[1])
+			  .then(result =>{
+			  	res.send(result[0]);
+			  })
+			  .catch(err =>{
+			  	res.send(err);
+			  })
+	    } 
 }
 
 module.exports = new RouteController();

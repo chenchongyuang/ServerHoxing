@@ -26,5 +26,5 @@ exports.routes = function (app) {
     //地址添加
     app.get('/address',RouteController.addressController);
     //地址管理
-
+    app.get('/ship_ads',RouteController.ship_adsController);
 }

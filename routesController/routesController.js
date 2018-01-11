@@ -60,7 +60,7 @@ class RouteController {
 		Utils.addCrypto(req.body,'pwd');
 		let selectSQL1 = SQL.findOneSQL(req.body,'phone');
 		let selectSQL2 = SQL.loginSQL(req.body,'phone','pwd');
-		//let selectSQL3 = SQL.address_InquireSQL();
+		
 		   API.query(selectSQL1)
 		     .then(result =>{
 		     	if(result[0].length === 1){
@@ -69,13 +69,13 @@ class RouteController {
                       	if(result[0].length === 1){
                       		common.login.success.phone = result[0][0].phone;
                       		common.login.success.uname = result[0][0].uname;
+                      		common.login.success.uid = result[0][0].uid;
                       		let updatsql = SQL.loginstatusSQL(req.body,1);
                       		for(let i=0;i<updatsql.length;i++){
                       			  API.query(updatsql[i])
 	                      		   .then(result =>{
 	                      		   	   if( i === updatsql.length - 1 ){
                                    common.login.success.default_address = result[0][0].area +','+result[0][0].detailed_area;
-                                   console.log(common.login.success.default_address)
 	                      		   	   res.json(common.login.success);
 	                      		   	   }
 	                                 
@@ -151,7 +151,6 @@ class RouteController {
 	//修改密码
 	forget_pwdController(req,res){
 		Utils.addCrypto(req.body,'pwd');
-		console.log(req.body);
 		let selectSQL = SQL.findOneSQL(req.body,'phone');
 		let selectSQL1 = SQL.forget_pwdSQL(req.body);
 		API.query(selectSQL)
@@ -198,19 +197,19 @@ class RouteController {
 	}
     //购物车查询
 	shoppingController(req,res){
-		let selectSQL = SQL.shoppingSQL();
+		let selectSQL = SQL.shoppingSQL(req.query);
 		let data = [];
 		API.query(selectSQL[0])
 		  .then(result =>{
 		  	data.push(result[0])
 		  	API.query(selectSQL[1])
-		  	.then(result =>{
-		  		data.push(result[0])
-		  		res.send(data);
-		  	})
-		  	.catch(err =>{
-		  		res.send(err);
-		  	})
+			  	.then(result =>{
+			  		data.push(result[0])
+			  		res.send(data);
+			  	})
+			  	.catch(err =>{
+			  		res.send(err);
+			  	})
 		  
 		  })
 		  .catch(err =>{
@@ -244,7 +243,6 @@ class RouteController {
 		let selectSQL = SQL.addressSQL(req.query);
 		API.query(selectSQL[0])
 		  .then(result =>{
-		  	console.log(result[0]);
 		  	res.send(result[0]);
 		  })
 		  .catch(err =>{
@@ -252,8 +250,7 @@ class RouteController {
 		  })
 	}
 	//地址管理
-  ship_adsController(req,res){
-    	console.log(req.query);
+    ship_adsController(req,res){
     	let selectSQL = SQL.addressSQL(req.query);
 			API.query(selectSQL[1])
 			  .then(result =>{
@@ -262,7 +259,32 @@ class RouteController {
 			  .catch(err =>{
 			  	res.send(err);
 			  })
-	    } 
+	} 
+    //加入购物车
+    join_shoppingController(req,res){
+    	let selectSQL = SQL.shoppingSQL(req.query);
+    	API.query(selectSQL[2])
+    	  .then(result =>{
+    	  	console.log(result[0]);
+    	  	res.send(result[0]);
+    	  })
+    	  .catch(err =>{
+    	  	res.send('出错了');
+    	  })
+    }
+    //修改个人资料
+    mine_dataController(req,res){
+        console.log(typeof req.query.obj)
+    	let selectSQL = SQL.mine_dataSQL(req.query.obj,req.query.val);
+    	console.log(selectSQL)
+    	API.query(selectSQL)
+    	  .then(result =>{
+    	  	res.send(result[0]);
+    	  })
+    	  .catch(err =>{
+    	  	res.send('出错了');
+    	  })
+    }
 }
 
 module.exports = new RouteController();

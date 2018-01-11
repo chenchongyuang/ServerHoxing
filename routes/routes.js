@@ -27,4 +27,8 @@ exports.routes = function (app) {
     app.get('/address',RouteController.addressController);
     //地址管理
     app.get('/ship_ads',RouteController.ship_adsController);
+    //加入购物车
+    app.get('/join_shopping',RouteController.join_shoppingController);
+    //修改个人资料
+    app.get('/mine_data',RouteController.mine_dataController);
 }

@@ -70,14 +70,15 @@ class RouteController {
                       		common.login.success.phone = result[0][0].phone;
                       		common.login.success.uname = result[0][0].uname;
                       		common.login.success.uid = result[0][0].uid;
+                      		common.login.success.ger = result[0][0].ger;
                       		let updatsql = SQL.loginstatusSQL(req.body,1);
                       		for(let i=0;i<updatsql.length;i++){
                       			  API.query(updatsql[i])
 	                      		   .then(result =>{
 	                      		   	   if( i === updatsql.length - 1 ){
-                                   common.login.success.default_address = result[0][0].area +','+result[0][0].detailed_area;
-	                      		   	   res.json(common.login.success);
-	                      		   	   }
+	                                       common.login.success.default_address = result[0][0].area +','+result[0][0].detailed_area;
+		                      		   	   res.json(common.login.success);
+		                      		   	   }
 	                                 
 	                      		   })
 	                      		   .catch(err =>{
@@ -274,9 +275,8 @@ class RouteController {
     }
     //修改个人资料
     mine_dataController(req,res){
-        console.log(typeof req.query.obj)
-    	let selectSQL = SQL.mine_dataSQL(req.query.obj,req.query.val);
-    	console.log(selectSQL)
+    	let obj=JSON.parse(req.query.obj)
+    	let selectSQL = SQL.mine_dataSQL(obj,req.query.val1,req.query.val2,req.query.val3);
     	API.query(selectSQL)
     	  .then(result =>{
     	  	res.send(result[0]);

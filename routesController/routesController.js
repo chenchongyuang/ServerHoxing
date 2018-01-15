@@ -8,7 +8,7 @@ const common =require(__basename + '/common/common.js');
 
 class RouteController {
 	constructor () {}
-    //短信验证功能
+    //短信获取验证码功能
 	sendMessageController (req,res){
         //随机生成6位验证码
 
@@ -28,6 +28,33 @@ class RouteController {
 				    console.log(err);
 				    res.json({msg:'发送超时',status:0})
 				})*/
+	}
+	//email获取验证码功能
+	forget_pwd_emailController(req,res){
+		let time = new Date().getTime().toString();
+		let code = time.slice(time.length - 6);
+		let selectSQL = SQL.emailSQL(req.body);
+		API.query(selectSQL)
+		.then(result =>{
+			if(result[0].length == 1){
+				let options = {
+				from:'13927975080@163.com',
+				to:req.body.email,
+				subject:'修改密码',
+				text:'验证码',
+				html:'<b>您的验证码是'+ code +'请在规定时间输入</b>'
+			    };
+				Utils.sendEmail(options,() =>{
+	                res.send({msg: '验证码已发至您的邮箱, 请注意查收!', statusCode: 700, validCode: code});
+				})
+			}else{
+				res.send('出错了');
+			}
+			
+		})
+		.catch(err =>{
+			res.send('出错了');
+		})
 	}
 	//注册功能
 	registerController(req,res){

@@ -2,6 +2,17 @@
 
 const crypto = require('crypto');
 
+const nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+  host: 'smtp.163.com', //主机地址
+  port: 25, //端口
+  auth: {
+    user: '13927975080@163.com', //发件邮箱
+    pass: '13927975080qq' //授权码  
+  }
+});
+
 class Utils{
 	constructor () {}
 	//短信功能
@@ -31,6 +42,10 @@ class Utils{
 
        o[field] = md5.digest('hex');
 	}
+	//发邮箱
+	sendEmail (options, fn) {
+    transporter.sendMail(options, fn);
+  }
 }
 	
 

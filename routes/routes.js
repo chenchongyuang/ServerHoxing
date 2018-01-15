@@ -15,8 +15,10 @@ exports.routes = function (app) {
     app.get('/product',RouteController.productController);
     //全部订单数据获取
     app.get('/order',RouteController.orderController);
-    //修改密码验证
-    app.post('/forget_pwd',RouteController.forget_pwdController);   
+    //手机修改密码验证
+    app.post('/forget_pwd',RouteController.forget_pwdController); 
+    //email修改密码验证码
+    app.post('/message_email',RouteController.forget_pwd_emailController);
     //购物车数据获取
     app.get('/shopping',RouteController.shoppingController);
     //退货数据获取

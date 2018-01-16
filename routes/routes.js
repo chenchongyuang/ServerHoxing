@@ -17,8 +17,10 @@ exports.routes = function (app) {
     app.get('/order',RouteController.orderController);
     //手机修改密码验证
     app.post('/forget_pwd',RouteController.forget_pwdController); 
+    //email修改密码验证
+    app.post('/forget_pwd_email',RouteController.forget_pwd_emailController);
     //email修改密码验证码
-    app.post('/message_email',RouteController.forget_pwd_emailController);
+    app.post('/message_email',RouteController.forget_pwd_email_codeController);
     //购物车数据获取
     app.get('/shopping',RouteController.shoppingController);
     //退货数据获取
@@ -33,4 +35,6 @@ exports.routes = function (app) {
     app.get('/join_shopping',RouteController.join_shoppingController);
     //修改个人资料
     app.get('/mine_data',RouteController.mine_dataController);
+    //退出登录
+    app.get('/drop_out',RouteController.drop_outController);
 }

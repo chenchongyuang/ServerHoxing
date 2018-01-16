@@ -30,7 +30,7 @@ class RouteController {
 				})*/
 	}
 	//email获取验证码功能
-	forget_pwd_emailController(req,res){
+	forget_pwd_email_codeController(req,res){
 		let time = new Date().getTime().toString();
 		let code = time.slice(time.length - 6);
 		let selectSQL = SQL.emailSQL(req.body);
@@ -58,7 +58,6 @@ class RouteController {
 	}
 	//注册功能
 	registerController(req,res){
-	  
       //查询手机号是否被注册
       let selectSQL = SQL.findOneSQL(req.body,'phone');
       API.query(selectSQL)
@@ -68,11 +67,14 @@ class RouteController {
         	}else{
 	    		Utils.addCrypto(req.body,'pwd');
 					  let sql = SQL.registerSQL(req.body);
+
 					  API.query(sql)
 						  .then(data =>{
+						  	console.log(sql);
 						  	res.json(common.register.success);
 						  }) 
 						  .catch(err =>{
+						  	
 						  	res.json(common.register.error);
 				 })
 	          }
@@ -176,7 +178,7 @@ class RouteController {
           })
         
 	}
-	//修改密码
+	//手机修改密码
 	forget_pwdController(req,res){
 		Utils.addCrypto(req.body,'pwd');
 		let selectSQL = SQL.findOneSQL(req.body,'phone');
@@ -184,17 +186,40 @@ class RouteController {
 		API.query(selectSQL)
 		  .then(result =>{
 		  	  if(result[0].length === 1){
-                     API.query(selectSQL1)
+                     API.query(selectSQL1[0])
                      .then(result =>{
                    	    res.send('修改成功');
                      })
                      .catch(err =>{
                      	res.send(err);
                      })
-                       
-                   
 		  	  }else{
 		  	  	 res.send('账号未注册');
+		  	  }
+		  })
+		  .catch(err =>{
+		  	res.send(err);
+		  })
+	}
+	//email修改密码
+	forget_pwd_emailController(req,res){
+		Utils.addCrypto(req.body,'pwd');
+		let selectSQL = SQL.findOneSQL(req.body,'email');
+		let selectSQL1 = SQL.forget_pwdSQL(req.body);
+		API.query(selectSQL)
+		  .then(result =>{
+		  	  if(result[0].length === 1){
+                     API.query(selectSQL1[1])
+                     .then(result =>{
+                     	console.log(result[0]);
+                   	    res.send('修改成功');
+                     })
+                     .catch(err =>{
+                     	res.send(err);
+                     })
+
+		  	  }else{
+		  	  	 res.send('email未注册');
 		  	  }
 		  	 
 		  })
@@ -311,6 +336,17 @@ class RouteController {
     	  .catch(err =>{
     	  	res.send('出错了');
     	  })
+    }
+    //退出登录
+    drop_outController(req,res){
+    	let selectSQL = SQL.loginstatusSQL(req.query,0);
+    	  API.query(selectSQL[0])
+    	    .then(reault =>{
+    	    	res.send('成功退出');
+    	    })
+    	    .catch(err =>{
+    	    	res.send('出错了');
+    	    })
     }
 }
 

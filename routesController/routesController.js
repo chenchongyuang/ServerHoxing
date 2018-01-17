@@ -89,31 +89,30 @@ class RouteController {
 		Utils.addCrypto(req.body,'pwd');
 		let selectSQL1 = SQL.findOneSQL(req.body,'phone');
 		let selectSQL2 = SQL.loginSQL(req.body,'phone','pwd');
-		
 		   API.query(selectSQL1)
 		     .then(result =>{
 		     	if(result[0].length === 1){
-                    API.query(selectSQL2)
+                    API.query(selectSQL2[0])
                       .then(result =>{
                       	if(result[0].length === 1){
                       		common.login.success.phone = result[0][0].phone;
                       		common.login.success.uname = result[0][0].uname;
                       		common.login.success.uid = result[0][0].uid;
                       		common.login.success.ger = result[0][0].ger;
-                      		let updatsql = SQL.loginstatusSQL(req.body,1);
-                      		for(let i=0;i<updatsql.length;i++){
-                      			  API.query(updatsql[i])
-	                      		   .then(result =>{
-	                      		   	   if( i === updatsql.length - 1 ){
-	                                       common.login.success.default_address = result[0][0].area +','+result[0][0].detailed_area;
-		                      		   	   res.json(common.login.success);
-		                      		   	   }
-	                                 
-	                      		   })
-	                      		   .catch(err =>{
-	                      		   	   res.json(common.login.info);
-	                      		   })
-                      		}
+	                      		let updatsql = SQL.loginstatusSQL(req.body,1);
+	                      		for(let i=0;i<updatsql.length;i++){
+	                      			  API.query(updatsql[i])
+		                      		   .then(result =>{
+		                      		   	   if( i === updatsql.length - 1 ){
+		                                       common.login.success.default_address = result[0][0].area +','+result[0][0].detailed_area;
+			                      		   	   res.json(common.login.success);
+			                      		   	   }
+		                                 
+		                      		   })
+		                      		   .catch(err =>{
+		                      		   	   res.json(common.login.info);
+		                      		   })
+	                      		}
                       		
                       	}else{
                             res.json(common.login.error);

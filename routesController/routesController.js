@@ -15,9 +15,10 @@ class RouteController {
         let time = new Date().getTime().toString();
         
         let code = time.slice(time.length - 6);
-         res.send({code});
-        /*Utils.sendMessage(req.query.phone,code)
+         
+        Utils.sendMessage(req.body.phone,code)
         .then((data) => {
+
 				    let {Code} = data;
 				    if (Code === 'OK') {
 				        //处理返回参数
@@ -27,7 +28,7 @@ class RouteController {
 				}, (err) => {
 				    console.log(err);
 				    res.json({msg:'发送超时',status:0})
-				})*/
+				})
 	}
 	//email获取验证码功能
 	forget_pwd_email_codeController(req,res){
